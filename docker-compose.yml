@@ -1,0 +1,39 @@
+version: "3"
+volumes:
+  mht-vol:
+networks:
+  mht_intranet:
+
+services:
+  mht-redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    networks:
+      - mht_intranet
+  mht-mongodb:
+    image: "mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mht"
+      MONGO_INITDB_ROOT_PASSWORD: "MinhH@p2015!@"
+    volumes:
+      - ./mongo-volume:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - mht_intranet
+  mht-rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "mht"
+      RABBITMQ_DEFAULT_PASS: "MinhH@p2015!@"
+      RABBITMQ_DEFAULT_VHOST: "mht"
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - mht_intranet
